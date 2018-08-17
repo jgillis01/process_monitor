@@ -1,18 +1,9 @@
 defmodule ProcessMonitor do
-  @moduledoc """
-  Documentation for ProcessMonitor.
-  """
+  alias Instance.Server
 
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> ProcessMonitor.hello()
-      :world
-
-  """
-  def hello do
-    :world
+  def add_instance_connection(opts) do
+    DynamicSupervisor.start_child(InstanceSupervisor, {Server, opts})
   end
+
+  defdelegate execute_command(instance, command), to: Server
 end
