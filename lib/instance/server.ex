@@ -3,11 +3,16 @@ defmodule Instance.Server do
 
   ## Client API
   def start_link(opts) do
-    GenServer.start_link(__MODULE__, opts)
+    name = opts
+           |> Keyword.get(:ip)
+           |> name_via_registry()
+
+    GenServer.start_link(__MODULE__, opts, name: name)
   end
 
-  def execute_command(pid, command) do
-    GenServer.call(pid, {:execute_command, command})
+  def execute_command(instance, command) do
+    name = name_via_registry(instance)
+    GenServer.call(name, {:execute_command, command})
   end
 
   ## Server API
@@ -18,5 +23,9 @@ defmodule Instance.Server do
   def handle_call({:execute_command, command}, _from, conn) do
     result = SSHEx.cmd!(conn, command)
     {:reply, result, conn}
+  end
+
+  defp name_via_registry(instance) do
+    {:via, Registry, {InstanceRegistry, instance}}
   end
 end
