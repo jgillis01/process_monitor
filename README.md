@@ -7,7 +7,7 @@ Elixir and OTP to Monitor Legacy Infrastructure."
 
 You can follow along by checking out each commit and viewing the code.  This
 repo also contains the [asciinema](https://asciinema.org) files used to play back terminal session
-recordings.  You download/install the player to play back these files.
+recordings.  You can download/install the player to play back these files.
 
 ## Installation
 

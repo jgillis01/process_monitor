@@ -1,6 +1,8 @@
 defmodule Instance.Server do
   use GenServer
 
+  import Utils, only: [notify: 2]
+
   ## Client API
   def start_link(opts) do
     name = opts
@@ -17,7 +19,9 @@ defmodule Instance.Server do
 
   ## Server API
   def init(opts) do
-    SSHEx.connect(opts)
+    result = {:ok, _pid} =  SSHEx.connect(opts)
+    notify("connection_ready", Keyword.get(opts, :ip))
+    result
   end
 
   def handle_call({:execute_command, command}, _from, conn) do
